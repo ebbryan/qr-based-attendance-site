@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
+
+import BackgroundProvider from "@/components/Providers/background.provider";
 import ProgressBarProvider from "@/components/Providers/progressbar.provider";
+
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <ProgressBarProvider>{children}</ProgressBarProvider>
+        <ProgressBarProvider>
+          <BackgroundProvider>{children}</BackgroundProvider>
+        </ProgressBarProvider>
       </body>
     </html>
   );
