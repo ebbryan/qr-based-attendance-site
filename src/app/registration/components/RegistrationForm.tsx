@@ -1,5 +1,10 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,15 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-  studentSchema,
-  TGradeLevels,
-  TStrands,
-  TStudents,
-} from "@/schemas/students.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -28,18 +24,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { getGradeLevelById } from "@/requests/grade-level.request";
 import {
   registerStudent,
   UploadStudentImage,
 } from "@/requests/students.request";
-import { getGradeLevelById } from "@/requests/grade-level.schema";
-import { useRouter } from "next/navigation";
+import {
+  studentSchema,
+  TGradeLevels,
+  TStrands,
+  TStudents,
+} from "@/schemas/students.schema";
 
 const RegistrationForm = ({
   gradeLevelsData,
   strandsData,
 }: {
-  gradeLevelsData: TGradeLevels[];
+  gradeLevelsData: TGradeLevels[] | undefined;
   strandsData: TStrands[];
 }) => {
   const router = useRouter();
@@ -80,10 +81,12 @@ const RegistrationForm = ({
     const fetchData = async () => {
       const response = await getGradeLevelById(watchGradeLevel);
       if (response.success) {
-        const isJrHigh = gradeLevelsData
-          .slice(0, 4)
-          .filter((item) => item.id === response.data?.id);
-        const booleanRes = isJrHigh.length < 1 ? false : true;
+        const isJrHigh =
+          gradeLevelsData &&
+          gradeLevelsData
+            .slice(0, 4)
+            .filter((item) => item.id === response.data?.id);
+        const booleanRes = isJrHigh && isJrHigh.length < 1 ? false : true;
         setIsJuniorHigh(booleanRes);
         return isJrHigh;
       }
@@ -173,11 +176,12 @@ const RegistrationForm = ({
                         <SelectValue placeholder="Select Grade Level" />
                       </SelectTrigger>
                       <SelectContent>
-                        {gradeLevelsData.map((item) => (
-                          <SelectItem key={item.id} value={String(item.id)}>
-                            {item.grade_level_number}
-                          </SelectItem>
-                        ))}
+                        {gradeLevelsData &&
+                          gradeLevelsData.map((item) => (
+                            <SelectItem key={item.id} value={String(item.id)}>
+                              {item.grade_level_number}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                   </FormControl>

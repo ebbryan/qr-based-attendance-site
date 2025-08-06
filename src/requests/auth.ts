@@ -1,24 +1,26 @@
 "use server";
 
-import directus from "@/lib/directus";
-import { AuthenticationData, LocalLoginPayload } from "@directus/sdk";
 import { cookies } from "next/headers";
+import { AuthenticationData, LocalLoginPayload } from "@directus/sdk";
+
+import { AUTH } from "@/constants/auth.enum";
+import { ERROR, SUCCESS } from "@/constants/error-success-messages.enum";
+import directus from "@/lib/directus";
 
 export const loginHandler = async (payload: LocalLoginPayload) => {
   const cookie = await cookies();
   return await directus
     .login(payload)
     .then((value: AuthenticationData) => {
-      console.log("🚀 ~ loginHandler ~ value:", value);
       if (!value?.access_token) {
-        return { message: "Invalid credentials", success: false };
+        return { message: ERROR.INVALID_CREDENTIALS, success: false };
       }
-      cookie.set("access_token", value.access_token);
-      return { message: "Login successful", success: true };
+      cookie.set(AUTH.ACCESS_TOKEN, value.access_token);
+      return { message: SUCCESS.LOGIN_SUCCESSFUL, success: true };
     })
     .catch(() => {
       return {
-        message: "Invalid credentials",
+        message: ERROR.INVALID_CREDENTIALS,
         success: false,
       };
     });
