@@ -1,7 +1,8 @@
 "use client";
 
-import { TExtendedQRProfile } from "@/schemas/students.schema";
 import React from "react";
+import { useRouter } from "next/navigation";
+
 import {
   Table,
   TableBody,
@@ -10,12 +11,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
+import { ROUTES } from "@/constants/routes.enum";
+import { TExtendedQRProfile } from "@/schemas/students.schema";
 
 const TableComponent = ({ data }: { data: TExtendedQRProfile[] }) => {
   const router = useRouter();
   const onRowClick = (id: string | undefined) => {
-    router.push(`/qr-registration/${id}`);
+    router.push(`${ROUTES.QR_REGISTRATION}/${id}`);
   };
   return (
     <>
@@ -31,7 +33,11 @@ const TableComponent = ({ data }: { data: TExtendedQRProfile[] }) => {
         <TableBody>
           {data.map((item) => {
             return (
-              <TableRow key={item.id} onClick={() => onRowClick(item.id)}>
+              <TableRow
+                key={item.id}
+                className="cursor-pointer"
+                onClick={() => onRowClick(item.id)}
+              >
                 <TableCell className="font-medium">
                   {item.student_id.grade_level_id.grade_level_number}
                 </TableCell>
