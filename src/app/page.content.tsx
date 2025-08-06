@@ -10,12 +10,13 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useRouter } from "@bprogress/next/app";
+import { ROUTES } from "@/constants/routes.enum";
 
 const PageContent = () => {
   const router = useRouter();
   const cardRoutes = [
-    { id: 1, title: "Attendance App", path: "/attendance-app" },
-    { id: 2, title: "Login", path: "/login" },
+    { id: 1, title: "Attendance App", path: "#" },
+    { id: 2, title: "Login", path: ROUTES.LOGIN },
   ];
   const onNavigate = (path: string) => router.push(path);
 
