@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@bprogress/next": "^3.2.12",
     "@directus/sdk": "^20.0.1",
     "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-dialog": "^1.1.14",
